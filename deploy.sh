@@ -1,15 +1,22 @@
-# build
+#!/bin/sh
+
+# Exit script on any error
+set -e
+
+# Build the project
 npm run build
 
-LOGSTRING=$(git log)
-COMMIT=$(echo $LOGSTRING | awk '{print $2}')
-
+# Navigate to the build directory
 cd dist
 
+# Initialize a new Git repository
 git init
 git add -A
-git commit -m "deploy (commit: $COMMIT)"
+git commit -m "deploy (commit: $(git rev-parse --short HEAD))"
 
+# Force push to the gh-pages branch
 git push -f https://github.com/gilespi/StoreLocatorApp.git master:gh-pages
 
-cd..
+# Navigate back to the original directory
+cd ..
+
